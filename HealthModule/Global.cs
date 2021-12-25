@@ -18,10 +18,11 @@ namespace HealthModule
             {typeof(AT9mm), new int[2]{51, 25} },
             {typeof(ATSniper), new int[2]{100, 75} },
             {typeof(ATShrapnel), new int[2]{23, 17} },
+            {typeof(ATWagnus), new int[2]{30, 25} },
             {typeof(Sharpshot), new int[3]{120, 120, 60} },
             {typeof(Sniper), new int[3]{100, 100, 30} },
             {typeof(Pistol), new int[2]{51, 25} },
-            {typeof(SnubbyPistol), new int[2]{51, 25} },
+            {typeof(SnubbyPistol), new int[2]{51, 39} },
             {typeof(PewPewLaser), new int[2]{34, 25} },
             {typeof(LaserRifle), new int[2]{45, 31} },
             {typeof(Chaingun), new int[2]{34, 25} },
@@ -41,6 +42,7 @@ namespace HealthModule
             {typeof(OldPistol), new int[2]{74, 61} },
             {typeof(SuicidePistol), new int[2]{94, 65} },
             {typeof(Bazooka), new int[2]{120, 120} },
+            
         };
 
         internal static Dictionary<Type, int[,]> SpecialDamages = new Dictionary<Type, int[,]>()
