@@ -40,7 +40,7 @@ namespace HealthModule
                         float distance = delta.length / bullet.ammo.range;
                         if (distance <= 0.7f)
                         {
-                            damage = 100;
+                            damage = 120;
                             stunTime = 60;
                         }
                         else
@@ -51,24 +51,8 @@ namespace HealthModule
                     }
                     else if (bullet.ammo is ATPhaser phaserAmmo)
                     {
-                        switch (phaserAmmo.penetration)
-                        {
-                            case 1:
-                                if (hitPart == 0)
-                                    damage = 25;
-                                else damage = 17;
-                                break;
-                            case 2:
-                                if (hitPart == 0)
-                                    damage = 62;
-                                else damage = 47;
-                                stunTime = 5;
-                                break;
-                            case 3:
-                                damage = 87;
-                                stunTime = 10;
-                                break;
-                        }
+                        damage = Global.GetDamage(phaserAmmo.GetType(), hitPart, phaserAmmo.penetration);
+                        stunTime = Global.GetStunTime(phaserAmmo.GetType(), phaserAmmo.penetration);
                     }
                     else if (bullet.firedFrom is Gun gun && gun != null)
                     {

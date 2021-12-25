@@ -12,11 +12,12 @@ namespace HealthModule
         public Duck duck = null;
 
         public static float MaxHealth = 100f;
+        public static float MaxShield = 20f;
 
         public float health = 100f;
         public float healthCache = 0f;
 
-        public float shield = 0f;
+        public float shield = 20f;
         public float shieldCache = 0f;
 
         private float _stunTime = 0f;
@@ -33,12 +34,12 @@ namespace HealthModule
 
         public float lastStunned = 0f;
         public float lastDamage = 0f;
-        public int sinceLastHurt = 0;
+        public int sinceLastHurt = 180;
 
         public HealthManager(Duck duck) => this.duck = duck;
         public void Draw()
         {
-            if (duck == null) return;
+            if (duck == null || !duck.visible) return;
             if (health == 0 && healthCache == 0 && shieldCache == 0 && shield == 0) return;
             Vec2 TopLeft;
             Vec2 TopRight;
@@ -78,13 +79,13 @@ namespace HealthModule
             }
             if (shield > 0)
             {
-                float shieldPercent = shield / MaxHealth;
+                float shieldPercent = shield / MaxShield;
                 Graphics.DrawRect(TopLeft + new Vec2(0, -2), TopLeft + new Vec2(length * shieldPercent, 0), Color.SkyBlue, duck.depth);
                 rightShieldPos.x = length * shieldPercent;
             }
             if (shieldCache > 0)
             {
-                float shieldCachePercent = (shieldCache - shield) / MaxHealth;
+                float shieldCachePercent = (shieldCache - shield) / MaxShield;
                 Graphics.DrawRect(TopLeft + new Vec2(0, -2) + rightShieldPos, TopLeft + new Vec2(length * shieldCachePercent + rightShieldPos.x, 0), Color.LightSkyBlue, duck.depth);
             }
             if (stunTime > 0 && stunTimeCache > 0)
@@ -110,6 +111,13 @@ namespace HealthModule
                 {
                     health += recoveryHealth;
                     recoveryHealth = 0;
+                }
+
+                if (recoveryHealth <= 0 && shield < MaxShield)
+                {
+                    if(shield <= 0)
+                        SFX.Play("laserChargeShort", 1f, Rando.Float(-0.1f, 0.1f), 0f, false);
+                    shield += 0.25f;
                 }
             }
             if (!Network.isActive || duck.connection == DuckNetwork.localConnection)
@@ -180,6 +188,7 @@ namespace HealthModule
                 {
                     tempDamage -= shield;
                     shield = 0;
+                    SFX.Play("laserUnchargeShort", 1f, Rando.Float(-0.1f, 0.1f), 0f, false);
                 }
             }
 
@@ -192,7 +201,6 @@ namespace HealthModule
             shield = 0;
             health = 0;
             return true;
-
         }
     }
 }
